@@ -17,9 +17,10 @@ gulp.task('vet', function () {
         .pipe($.jshint.reporter('jshint-stylish', {verbose: 'true'}))
         .pipe($.jshint.reporter('fail'));
 });
-gulp.task('styles',['clean-styles'], function () {
+gulp.task('styles', ['clean-styles'], function () {
     log('Compiling css-- less');
     return gulp.src(configs.less)
+        .pipe($.plumber())
         .pipe($.less())
         .pipe($.autoprefixer({browsers: ['last 2 version', '>5%']}))
         .pipe(gulp.dest(configs.temp));
@@ -29,10 +30,13 @@ gulp.task('clean-styles', function () {
     var files = configs.temp + '**/*.css';
     clean(files);
 });
+gulp.task('style-watch', function () {
+    gulp.watch([configs.less], ['styles']);
+})
 function clean(path) {
     log('Cleaning' + $.util.colors.blue(path));
     del(path);
-};
+}
 function log(msg) {
     if (typeof(msg) === 'object') {
         for (var item in msg) {
