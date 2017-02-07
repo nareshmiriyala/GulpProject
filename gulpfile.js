@@ -1,9 +1,10 @@
 var gulp = require('gulp');
 var args = require('yargs').argv;
 var del = require('del');
+var wiredep = require('wiredep').stream;
 var configs = require('./gulp.config.js')();
 var $ = require('gulp-load-plugins')({lazy: true});
-
+var port = process.env.PORT || configs.defaultPort;
 // var jshint = require('gulp-jshint');
 // var jscs = require('gulp-jscs');
 // var util = require('gulp-util');
@@ -32,6 +33,27 @@ gulp.task('clean-styles', function () {
 });
 gulp.task('style-watch', function () {
     gulp.watch([configs.less], ['styles']);
+});
+gulp.task('wiredep',['style-watch'], function () {
+    var options = configs.wiredepDefaultOptions();
+    return gulp.src(configs.index)
+        .pipe(wiredep(options))
+        .pipe($.inject(gulp.src(configs.jsdir)))
+        .pipe(gulp.dest(configs.client));
+});
+
+gulp.task('serve-dev', ['wiredep'], function () {
+    var isDev = true;
+    var nodeOptions = {
+        script: configs.nodeServer,
+        delayTime: 1,
+        env: {
+            'PORT': port,
+            'NODE_ENV': isDev ? 'dev' : 'build'
+        },
+        watch: [configs.server]
+    };
+    return $.nodemon(nodeOptions);
 })
 function clean(path) {
     log('Cleaning' + $.util.colors.blue(path));
