@@ -1,44 +1,59 @@
-/**
- * Created by nmiriyal on 7/02/2017.
- */
-module.exports = function () {
+module.exports = function() {
     var client = './src/client/';
     var clientApp = client + 'app/';
     var server = './src/server/';
+    var temp = './.tmp/';
+
     var config = {
-        temp: './.tmp/',
+        /**
+         * Files paths
+         */
         alljs: [
             './src/**/*.js',
-            '/*.js'
+            './*.js'
         ],
         client: client,
-        less: client + 'styles/styles.less',
+        css: temp + 'styles.css',
         index: client + 'index.html',
-        jsdir: [
+        js: [
             clientApp + '**/*.module.js',
             clientApp + '**/*.js',
             '!' + clientApp + '**/*.spec.js'
         ],
-        bower:{
-            json: require('./bower.json'),
-            directory: './bower_components',
-            ignorePath : '../..'
-        },
+        less: client + 'styles/styles.less',
+        server: server,
+        temp: temp,
+
         /**
-         * Node Settings
+         * browser sync
          */
-        defaultPort : 7203,
-        nodeServer : './src/server/app.js',
-        server : server
+        browserReloadDelay: 1000,
+
+        /**
+         * Bower and NPM locations
+         */
+        bower: {
+            json: require('./bower.json'),
+            directory: './bower_components/',
+            ignorePath: '../..'
+        },
+
+        /**
+         * Node settings
+         */
+        defaultPort: 7203,
+        nodeServer: './src/server/app.js'
+
     };
 
-    config.wiredepDefaultOptions = function () {
+    config.getWiredepDefaultOptions = function() {
         var options = {
             bowerJson: config.bower.json,
-            directroy: config.bower.directory,
+            directory: config.bower.directory,
             ignorePath: config.bower.ignorePath
         };
         return options;
     };
+
     return config;
-}
+};
