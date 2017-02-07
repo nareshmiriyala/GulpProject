@@ -4,7 +4,7 @@
 module.exports = function () {
     var client = './src/client/';
     var config = {
-        temp: './.tmp',
+        temp: './.tmp/',
         alljs: [
             './src/**/*.js',
             '/*.js'
