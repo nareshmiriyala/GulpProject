@@ -1,7 +1,6 @@
 {
     "directory": "bower_components",
-    "proxy": "http://rprman101.alinta.net.int:3128",
-    "https-proxy":"http://rprman101.alinta.net.int:3128",
+   
     "scripts": {
     }
 }
